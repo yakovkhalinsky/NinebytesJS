@@ -1,0 +1,35 @@
+<html>
+	<head>
+		<title>Testing Call Stacks</title>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+		<script type="text/javascript" src="ninebyt.es.js.callstack.0.1.js"></script>
+		<script type="text/javascript">
+			
+			function callbackFunction(stack) {
+				console.log('processing callback function:');
+				for (var index in stack.responseArray) {
+					console.log(stack.responseArray[index]);
+				}
+			}
+			
+			function runMe() {
+				var stack = new ninebyt_es_callstack(callbackFunction);
+				stack.addWorkItem('call.jsp', { arg1 : 'foo', arg2 : 1234 });
+				stack.addWorkItem('call.jsp', { arg1 : 'bar', arg2 : 2345 });
+				stack.execute();
+			}
+			
+			function runMeNoParameters() {
+				var stack = new ninebyt_es_callstack(callbackFunction);
+				stack.addWorkItem('call.jsp');
+				stack.addWorkItem('call.jsp');
+				stack.execute();
+			}
+
+		</script> 
+	</head>
+	<body>
+		<input type="button" value="run me" onclick="runMe()" style="width:120px" /><br/>
+		<input type="button" value="run me - No Params" onclick="runMeNoParameters()" style="width:120px" /><br/>
+	</body>
+</html>
