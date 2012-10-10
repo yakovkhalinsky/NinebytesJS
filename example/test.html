@@ -1,35 +1,38 @@
 <html>
 	<head>
 		<title>Testing Call Stacks</title>
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
-		<script type="text/javascript" src="ninebyt.es.js.callstack.0.1.js"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.js"></script>
+		<script type="text/javascript" src="/js/ninebytes.nexus.min.js"></script>
+		<script type="text/javascript" src="/js/ninebytes.callstack.min.js"></script>
+		<!-- ninebytes.config.js must always be included last -->
+		<script type="text/javascript" src="/js/ninebytes.config.js"></script>
 		<script type="text/javascript">
 			
 			function callbackFunction(stack) {
-				console.log('processing callback function:');
+				Ninebytes.Nexus.console.debug('processing callback function');
 				for (var index in stack.responseArray) {
-					console.log(stack.responseArray[index]);
+					Ninebytes.Nexus.console.info(stack.responseArray[index]);
 				}
 			}
 			
-			function runMe() {
-				var stack = new ninebyt_es_callstack(callbackFunction);
+			function runMeWithObject() {
+				var stack = new Ninebytes.Callstack(callbackFunction);
 				stack.addWorkItem('call.jsp', { arg1 : 'foo', arg2 : 1234 });
 				stack.addWorkItem('call.jsp', { arg1 : 'bar', arg2 : 2345 });
 				stack.execute();
 			}
 			
-			function runMeNoParameters() {
-				var stack = new ninebyt_es_callstack(callbackFunction);
-				stack.addWorkItem('call.jsp');
-				stack.addWorkItem('call.jsp');
-				stack.execute();
+			function runMeWithStaticMethods() {
+				Ninebytes.Callstack.Static.callback = callbackFunction;
+				Ninebytes.Callstack.Static.addWorkItem('call.jsp', { arg1 : 'foo', arg2 : 1234 });
+				Ninebytes.Callstack.Static.addWorkItem('call.jsp', { arg1 : 'bar', arg2 : 2345 });
+				Ninebytes.Callstack.Static.execute();
 			}
 
 		</script> 
 	</head>
 	<body>
-		<input type="button" value="run me" onclick="runMe()" style="width:120px" /><br/>
-		<input type="button" value="run me - No Params" onclick="runMeNoParameters()" style="width:120px" /><br/>
+		<input type="button" value="run me with callstack object" onclick="runMeWithObject()" style="width:420px" /><br/>
+		<input type="button" value="run me with static methods" onclick="runMeWithStaticMethods()" style="width:420px" /><br/>
 	</body>
 </html>
